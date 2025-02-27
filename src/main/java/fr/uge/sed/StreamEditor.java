@@ -3,10 +3,11 @@ package fr.uge.sed;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Locale;
 import java.util.Objects;
 
 public final class StreamEditor {
-    StreamEditor(){}
+    StreamEditor() {}
 
     public static Transformer createTransformer(String command) {
         return switch (command) {
@@ -28,7 +29,22 @@ public final class StreamEditor {
         Objects.requireNonNull(transformer);
         String line;
         while ((line = reader.readLine()) != null) {
-            writer.write(transformer.transform(line) + "\n");
+            String transformedLine = switch (transformer){
+                case UpperCaseTransformer _ -> line.toUpperCase(Locale.ROOT);
+                case LowerCaseTransformer _ -> line.toLowerCase(Locale.ROOT);
+                case StarTransformer t -> {
+                    var result = new StringBuilder();
+                    for(var c : line.toCharArray()){
+                        if(c == '*'){
+                            result.append("*".repeat(t.repeat()));
+                        }else{
+                            result.append(c);
+                        }
+                    }
+                    yield result.toString();
+                }
+            };
+            writer.write(transformedLine + "\n");
         }
     }
 }

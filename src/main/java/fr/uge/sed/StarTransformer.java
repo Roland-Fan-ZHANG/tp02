@@ -10,16 +10,20 @@ public final class StarTransformer implements Transformer {
         this.repeat = repeat;
     }
 
-    @Override
-    public String transform(String line) {
-        var result = new StringBuilder();
-        for (char c : line.toCharArray()) {
-            if (c == '*') {
-                result.append("*".repeat(repeat));
-            } else {
-                result.append(c);
-            }
-        }
-        return result.toString();
+    public int repeat(){
+        return repeat;
     }
+
+//    @Override
+//    public String transform(String line) {
+//        var result = new StringBuilder();
+//        for (char c : line.toCharArray()) {
+//            if (c == '*') {
+//                result.append("*".repeat(repeat));
+//            } else {
+//                result.append(c);
+//            }
+//        }
+//        return result.toString();
+//    }
 }
