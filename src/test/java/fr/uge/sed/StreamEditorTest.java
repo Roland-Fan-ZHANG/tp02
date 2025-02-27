@@ -316,7 +316,7 @@ public class StreamEditorTest {
       }
     }
   }
-/*
+
   @Nested
   public class Q4 {
     @Test
