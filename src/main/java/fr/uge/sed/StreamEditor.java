@@ -27,25 +27,30 @@ public final class StreamEditor {
         Objects.requireNonNull(reader);
         Objects.requireNonNull(writer);
         Objects.requireNonNull(transformer);
+
         String line;
         while ((line = reader.readLine()) != null) {
-            String transformedLine = switch (transformer){
-                case UpperCaseTransformer _ -> line.toUpperCase(Locale.ROOT);
-                case LowerCaseTransformer _ -> line.toLowerCase(Locale.ROOT);
-                case StarTransformer t -> {
-                    var result = new StringBuilder();
-                    for(var c : line.toCharArray()){
-                        if(c == '*'){
-                            result.append("*".repeat(t.repeat()));
-                        }else{
-                            result.append(c);
-                        }
-                    }
-                    yield result.toString();
-                }
-            };
-            writer.write(transformedLine + "\n");
+            writer.write(transformLine(line, transformer) + "\n");
         }
     }
-}
 
+    private static String transformLine(String line, Transformer transformer) {
+        return switch (transformer) {
+            case UpperCaseTransformer _ -> line.toUpperCase(Locale.ROOT);
+            case LowerCaseTransformer _ -> line.toLowerCase(Locale.ROOT);
+            case StarTransformer t -> transformStar(line, t.repeat());
+        };
+    }
+
+    private static String transformStar(String line, int repeat) {
+        var result = new StringBuilder();
+        for (var c : line.toCharArray()) {
+            if (c == '*') {
+                result.append("*".repeat(repeat));
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+}
